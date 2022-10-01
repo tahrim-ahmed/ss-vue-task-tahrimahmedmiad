@@ -1,6 +1,6 @@
 <template>
   <v-container>
-    <v-form ref="form" v-model="valid" lazy-validation>
+    <v-form>
       <v-text-field
         v-model="addStaff.id"
         :rules="[(v) => !!v || 'ID is required']"
@@ -43,23 +43,37 @@
         required
       ></v-text-field>
 
-      <v-btn class="mr-4"> Save </v-btn>
+      <v-select
+        v-model="type"
+        :items="types"
+        :rules="[(v) => !!v || 'Item is required']"
+        label="Staff Type"
+        required
+      ></v-select>
+
+      <v-btn width="100%" style="background: springgreen" @click="save">
+        Save
+      </v-btn>
     </v-form>
   </v-container>
 </template>
 
 <script lang="ts">
 import Vue from "vue";
+import { StaffsInterface } from "@/interfaces/staffs.interface";
 
 export default class AddComponent extends Vue {
   valid = true;
 
-  addStaff: any = {
+  types = ["Admin", "Employees"];
+
+  addStaff: StaffsInterface = {
     id: "",
     firstName: "",
-    lastname: "",
+    lastName: "",
     contact: "",
     email: "",
+    type: "",
   };
 }
 </script>

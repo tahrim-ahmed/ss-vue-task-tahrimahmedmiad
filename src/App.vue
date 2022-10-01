@@ -2,7 +2,7 @@
   <v-app id="inspire">
     <app-header />
 
-    <v-main>
+    <v-main style="background: #edfffd">
       <router-view />
     </v-main>
 
@@ -11,21 +11,21 @@
 </template>
 
 <script lang="ts">
-import Vue from 'vue';
-import {Component} from 'vue-property-decorator';
-import AppHeader from '@/layout/AppHeader.vue';
-import AppFooter from '@/layout/AppFooter.vue';
+import Vue from "vue";
+import { Component } from "vue-property-decorator";
+import AppHeader from "@/layout/AppHeader.vue";
+import AppFooter from "@/layout/AppFooter.vue";
 
-@Component({
+Component({
   components: {
     AppHeader,
-    AppFooter
+    AppFooter,
   },
-})
+});
 
 export default Vue.extend({
   name: "App",
-  components: {AppFooter, AppHeader},
+  components: { AppFooter, AppHeader },
   data: () => ({
     //
   }),

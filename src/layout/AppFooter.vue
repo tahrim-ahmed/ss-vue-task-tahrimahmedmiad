@@ -33,15 +33,15 @@ import { Component, Vue } from "vue-property-decorator";
   components: {},
 })
 export default class AppFooter extends Vue {
-  gotoFacebook() {
+  gotoFacebook(): void {
     window.open("https://facebook.com/pranhinmiad");
   }
 
-  gotoLinkedin() {
+  gotoLinkedin(): void {
     window.open("https://www.linkedin.com/in/tahrim-ahmed-miad-b523bb117");
   }
 
-  gotoGithub() {
+  gotoGithub(): void {
     window.open("https://github.com/tahrim-ahmed");
   }
 }
