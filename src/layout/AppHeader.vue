@@ -1,9 +1,16 @@
 <template>
-  <v-app-bar app color="primary" flat>
+  <v-app-bar app flat style="background: #edfffd">
     <v-container class="py-0 fill-height">
       <v-avatar class="mr-10">
         <img src="./images/Staff-remove.png" alt="Logo" />
       </v-avatar>
+      <router-link
+        to="/"
+        class="font-weight-bold"
+        style="text-decoration: none"
+      >
+        Staff Management System
+      </router-link>
 
       <v-spacer></v-spacer>
 

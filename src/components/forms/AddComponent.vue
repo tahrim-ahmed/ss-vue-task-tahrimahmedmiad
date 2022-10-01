@@ -16,7 +16,7 @@
       ></v-text-field>
 
       <v-text-field
-        v-model="addStaff.lastname"
+        v-model="addStaff.lastName"
         :rules="[(v) => !!v || 'Last Name is required']"
         label="Last Name"
         required
@@ -44,7 +44,7 @@
       ></v-text-field>
 
       <v-select
-        v-model="type"
+        v-model="addStaff.type"
         :items="types"
         :rules="[(v) => !!v || 'Item is required']"
         label="Staff Type"
@@ -63,8 +63,6 @@ import Vue from "vue";
 import { StaffsInterface } from "@/interfaces/staffs.interface";
 
 export default class AddComponent extends Vue {
-  valid = true;
-
   types = ["Admin", "Employees"];
 
   addStaff: StaffsInterface = {
@@ -75,5 +73,9 @@ export default class AddComponent extends Vue {
     email: "",
     type: "",
   };
+
+  save(): void {
+    console.log(this.addStaff);
+  }
 }
 </script>
