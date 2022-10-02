@@ -2,21 +2,21 @@
   <div class="staff">
     <v-container>
       <v-card elevation="9">
-        <v-tabs color="deep-purple accent-4">
+        <v-tabs color="deep-purple accent-4" @change="(e) => (selectedTab = e)">
           <v-tab>Admin</v-tab>
           <v-tab>Employee</v-tab>
 
           <v-tab-item>
             <v-container fluid>
               <v-row>
-                <staff-component />
+                <staff-component :selected-tab="selectedTab" />
               </v-row>
             </v-container>
           </v-tab-item>
           <v-tab-item>
             <v-container fluid>
               <v-row>
-                <staff-component />
+                <staff-component :selected-tab="selectedTab" />
               </v-row>
             </v-container>
           </v-tab-item>
@@ -37,18 +37,6 @@ import StaffComponent from "@/components/StaffComponent.vue";
   },
 })
 export default class Staffs extends Vue {
-  /*created() {}
-
-  editItem(item: any) {}
-
-  deleteItem(item: any) {}
-
-  deleteItemConfirm() {}
-
-  close() {}
-
-  closeDelete() {}
-
-  save() {}*/
+  selectedTab = 0;
 }
 </script>

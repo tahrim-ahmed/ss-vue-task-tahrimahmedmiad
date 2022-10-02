@@ -1,12 +1,12 @@
 <template>
-  <v-app-bar app flat style="background: #edfffd">
+  <v-app-bar app flat style="background: linear-gradient(to right, #fc00ff, #00dbde);">
     <v-container class="py-0 fill-height">
-      <v-avatar class="mr-10">
+      <v-avatar class="mr-3">
         <img src="./images/Staff-remove.png" alt="Logo" />
       </v-avatar>
       <router-link
         to="/"
-        class="font-weight-bold"
+        class="font-weight-bold black--text ml-0 pl-0"
         style="text-decoration: none"
       >
         Staff Management System

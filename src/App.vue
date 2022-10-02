@@ -2,7 +2,7 @@
   <v-app id="inspire">
     <app-header />
 
-    <v-main style="background: #edfffd">
+    <v-main>
       <router-view />
     </v-main>
 

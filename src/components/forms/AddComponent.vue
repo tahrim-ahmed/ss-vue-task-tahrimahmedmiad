@@ -61,7 +61,9 @@
 <script lang="ts">
 import Vue from "vue";
 import { StaffsInterface } from "@/interfaces/staffs.interface";
+import { Component } from "vue-property-decorator";
 
+@Component({})
 export default class AddComponent extends Vue {
   types = ["Admin", "Employees"];
 
@@ -75,7 +77,11 @@ export default class AddComponent extends Vue {
   };
 
   save(): void {
-    console.log(this.addStaff);
+    if (this.addStaff.type === "Admin") {
+      this.$store.dispatch("addAdmin", { ...this.addStaff });
+    } else {
+      this.$store.dispatch("addEmployee", { ...this.addStaff });
+    }
   }
 }
 </script>

@@ -43,8 +43,10 @@
           </v-row>
         </v-toolbar>
       </template>
-      <template>
-        <v-icon small class="mr-2"> mdi-pencil </v-icon>
+      <template v-slot:item.actions="{ item }">
+        <v-icon small class="mr-2" @click="editStaff(item)">
+          mdi-pencil
+        </v-icon>
         <v-icon small> mdi-delete </v-icon>
       </template>
     </v-data-table>
@@ -53,7 +55,7 @@
 
 <script lang="ts">
 import Vue from "vue";
-import { Component } from "vue-property-decorator";
+import { Component, Prop } from "vue-property-decorator";
 import AddComponent from "@/components/forms/AddComponent.vue";
 
 @Component({
@@ -62,6 +64,8 @@ import AddComponent from "@/components/forms/AddComponent.vue";
   },
 })
 export default class StaffComponent extends Vue {
+  @Prop(Number) selectedTab!: number;
+
   dialog = false;
 
   search = "";
@@ -74,11 +78,14 @@ export default class StaffComponent extends Vue {
     { text: "Email", sortable: false, value: "email" },
     { text: "Actions", sortable: false, value: "actions" },
   ];
-  staffs: unknown = [];
 
-  created(): void {
-    this.staffs = this.$store.getters.getAdmins;
-    console.log(this.staffs);
+  staffs: any[] =
+    this.selectedTab === 0
+      ? this.$store.getters.getAdmins
+      : this.$store.getters.getEmployees;
+
+  editStaff(staff: any) {
+    console.log(staff);
   }
 }
 </script>
