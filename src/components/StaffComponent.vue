@@ -94,14 +94,6 @@
                       width="100%"
                       style="background: springgreen"
                       type="submit"
-                      :disabled="
-                        staff.id === '' ||
-                        staff.firstName === '' ||
-                        staff.lastName === '' ||
-                        staff.contact === '' ||
-                        staff.email === '' ||
-                        staff.type === ''
-                      "
                     >
                       Save
                     </v-btn>
@@ -131,7 +123,12 @@
                     <v-btn color="red" text @click="deleteDialog = false"
                       >Cancel</v-btn
                     >
-                    <v-btn color="green" text>OK</v-btn>
+                    <v-btn
+                      color="green"
+                      text
+                      @click="deleteStaff(editedStaff.id)"
+                      >OK</v-btn
+                    >
                     <v-spacer></v-spacer>
                   </v-card-actions>
                 </v-card>
@@ -155,6 +152,12 @@
         <v-icon small @click="deleteItem(item)"> mdi-delete </v-icon>
       </template>
     </v-data-table>
+    <v-snackbar v-model="snackbar" :timeout="timeout" :color="snackbarColor">
+      <v-icon>
+        {{ snackbarIcon }}
+      </v-icon>
+      {{ notificationText }}
+    </v-snackbar>
   </v-container>
 </template>
 
@@ -177,6 +180,16 @@ export default class StaffComponent extends Vue {
   deleteDialog = false;
 
   dialog = false;
+
+  snackbar = false;
+
+  timeout = 2200;
+
+  snackbarColor = "";
+
+  snackbarIcon = "";
+
+  notificationText = "";
 
   search = "";
 
@@ -220,30 +233,39 @@ export default class StaffComponent extends Vue {
       ? this.$store.getters.getAdmins
       : this.$store.getters.getEmployees;
 
-  validation(): boolean {
-    return !(
-      this.staff.id === "" ||
-      this.staff.firstName === "" ||
-      this.staff.lastName === "" ||
-      this.staff.contact === "" ||
-      this.staff.email === "" ||
-      this.staff.type === ""
-    );
-  }
-
   save(): void {
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    //@ts-ignore
-    this.$refs.form.validate();
-    if (this.staff.type === "Admin") {
-      this.$store.dispatch("addAdmin", { ...this.staff });
+    if (
+      this.staff.id !== "" &&
+      this.staff.firstName !== "" &&
+      this.staff.lastName !== "" &&
+      this.staff.contact !== "" &&
+      this.staff.email !== "" &&
+      this.staff.type !== ""
+    ) {
+      if (this.staff.type === "Admin") {
+        this.$store.dispatch("addAdmin", { ...this.staff });
+      } else if (this.staff.type === "Employee") {
+        this.$store.dispatch("addEmployee", { ...this.staff });
+      }
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      //@ts-ignore
+      this.$refs.form.reset();
+      this.dialog = false;
+      this.notificationText = "Success";
+      this.snackbarColor = "success";
+      this.snackbarIcon = "mdi-check-all";
+      this.snackbar = true;
     } else {
-      this.$store.dispatch("addEmployee", { ...this.staff });
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      //@ts-ignore
+      this.$refs.form.reset();
+      this.dialog = false;
+      this.notificationText = "Please Fill All Fields!";
+      this.snackbarColor = "red";
+      this.snackbarIcon = "mdi-alert";
+      this.snackbar = true;
+      location.reload();
     }
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    //@ts-ignore
-    this.$refs.form.reset();
-    this.dialog = false;
   }
 
   closeDialog(): void {
@@ -254,6 +276,7 @@ export default class StaffComponent extends Vue {
     //@ts-ignore
     this.$refs.form.reset();
     this.dialog = false;
+    location.reload();
   }
 
   editStaff(staff: StaffsInterface): void {
@@ -264,6 +287,18 @@ export default class StaffComponent extends Vue {
     this.editedIndex = this.staffs.indexOf(staff);
     this.editedStaff = Object.assign({}, staff);
     this.deleteDialog = true;
+  }
+
+  deleteStaff(id: string): any {
+    this.selectedTab === 0
+      ? this.$store.dispatch("removeAdmin", id)
+      : this.$store.dispatch("removeEmployee", id);
+    this.notificationText = "Delete Success";
+    this.snackbarColor = "success";
+    this.snackbarIcon = "mdi-check-all";
+    this.snackbar = true;
+    this.deleteDialog = false;
+    location.reload();
   }
 }
 </script>
