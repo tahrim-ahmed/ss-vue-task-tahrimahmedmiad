@@ -19,6 +19,7 @@
                     class="mb-2"
                     v-bind="attrs"
                     v-on="on"
+                    @click="cardTitle = 'Add New Staff'"
                   >
                     New Staff
                   </v-btn>
@@ -30,9 +31,15 @@
                       background: linear-gradient(to right, #fc00ff, #00dbde);
                     "
                   >
-                    Add New Staff
+                    {{ cardTitle }}
                   </v-card-title>
-                  <v-form ref="form" class="mx-5" lazy-validation>
+                  <v-form
+                    ref="form"
+                    class="mx-5"
+                    lazy-validation
+                    v-model="valid"
+                    @submit.p.prevent="save"
+                  >
                     <v-text-field
                       v-model="staff.id"
                       :rules="[(v) => !!v || 'ID is required']"
@@ -86,7 +93,15 @@
                     <v-btn
                       width="100%"
                       style="background: springgreen"
-                      @click="save"
+                      type="submit"
+                      :disabled="
+                        staff.id === '' ||
+                        staff.firstName === '' ||
+                        staff.lastName === '' ||
+                        staff.contact === '' ||
+                        staff.email === '' ||
+                        staff.type === ''
+                      "
                     >
                       Save
                     </v-btn>
@@ -159,15 +174,6 @@ export default class StaffComponent extends Vue {
 
   types = ["Admin", "Employees"];
 
-  staff: StaffsInterface = {
-    id: "",
-    firstName: "",
-    lastName: "",
-    contact: "",
-    email: "",
-    type: "",
-  };
-
   deleteDialog = false;
 
   dialog = false;
@@ -178,7 +184,18 @@ export default class StaffComponent extends Vue {
 
   cardTitle = "";
 
+  valid = true;
+
   deleteText = "Are you sure you want to delete this staff ";
+
+  staff: StaffsInterface = {
+    id: "",
+    firstName: "",
+    lastName: "",
+    contact: "",
+    email: "",
+    type: "",
+  };
 
   editedStaff: StaffsInterface = {
     id: "",
@@ -198,23 +215,34 @@ export default class StaffComponent extends Vue {
     { text: "Actions", sortable: false, value: "actions" },
   ];
 
-  staffs: any[] =
+  staffs: StaffsInterface[] =
     this.selectedTab === 0
       ? this.$store.getters.getAdmins
       : this.$store.getters.getEmployees;
 
+  validation(): boolean {
+    return !(
+      this.staff.id === "" ||
+      this.staff.firstName === "" ||
+      this.staff.lastName === "" ||
+      this.staff.contact === "" ||
+      this.staff.email === "" ||
+      this.staff.type === ""
+    );
+  }
+
   save(): void {
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    //@ts-ignore
+    this.$refs.form.validate();
     if (this.staff.type === "Admin") {
       this.$store.dispatch("addAdmin", { ...this.staff });
     } else {
       this.$store.dispatch("addEmployee", { ...this.staff });
     }
-    this.staff.id = "";
-    this.staff.firstName = "";
-    this.staff.lastName = "";
-    this.staff.contact = "";
-    this.staff.email = "";
-    this.staff.type = "";
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    //@ts-ignore
+    this.$refs.form.reset();
     this.dialog = false;
   }
 
@@ -228,11 +256,11 @@ export default class StaffComponent extends Vue {
     this.dialog = false;
   }
 
-  editStaff(staff: any): void {
+  editStaff(staff: StaffsInterface): void {
     console.log(staff);
   }
 
-  deleteItem(staff: any): void {
+  deleteItem(staff: StaffsInterface): void {
     this.editedIndex = this.staffs.indexOf(staff);
     this.editedStaff = Object.assign({}, staff);
     this.deleteDialog = true;
