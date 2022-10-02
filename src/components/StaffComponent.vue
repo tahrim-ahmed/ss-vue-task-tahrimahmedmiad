@@ -173,13 +173,10 @@
 <script lang="ts">
 import Vue from "vue";
 import { Component, Prop } from "vue-property-decorator";
-import AddComponent from "@/components/forms/AddComponent.vue";
 import { StaffsInterface } from "@/interfaces/staffs.interface";
 
 @Component({
-  components: {
-    AddComponent,
-  },
+  components: {},
 })
 export default class StaffComponent extends Vue {
   @Prop(Number) selectedTab!: number;
