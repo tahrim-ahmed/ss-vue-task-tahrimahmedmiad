@@ -1,6 +1,11 @@
 import Vue from "vue";
 import Vuex from "vuex";
 import { StaffsInterface } from "@/interfaces/staffs.interface";
+import VuexPersistence from "vuex-persist";
+
+const vuexLocal = new VuexPersistence<StateInterface>({
+  storage: window.localStorage,
+});
 
 Vue.use(Vuex);
 
@@ -32,7 +37,7 @@ export default new Vuex.Store<StateInterface>({
       (state.admins = state.admins.filter((admin) => admin.id != id)),
 
     //for employee
-    addingEmployee: (state, newEmployee) => state.admins.push(newEmployee),
+    addingEmployee: (state, newEmployee) => state.employees.push(newEmployee),
     removingEmployee: (state, id) =>
       (state.employees = state.employees.filter(
         (employee) => employee.id != id
@@ -48,4 +53,5 @@ export default new Vuex.Store<StateInterface>({
       commit("addingEmployee", newEmployee),
     removeEmployee: ({ commit }, id) => commit("removingEmployee", id),
   },
+  plugins: [vuexLocal.plugin],
 });
