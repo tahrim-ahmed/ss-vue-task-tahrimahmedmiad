@@ -94,8 +94,17 @@
                       width="100%"
                       style="background: springgreen"
                       type="submit"
+                      v-if="cardTitle === 'Add New Staff'"
                     >
                       Save
+                    </v-btn>
+                    <v-btn
+                      width="100%"
+                      style="background: springgreen"
+                      @click="saveEdit"
+                      v-else
+                    >
+                      Update
                     </v-btn>
                     <v-btn width="100%" class="red my-5" @click="closeDialog">
                       Close
@@ -175,7 +184,7 @@ import { StaffsInterface } from "@/interfaces/staffs.interface";
 export default class StaffComponent extends Vue {
   @Prop(Number) selectedTab!: number;
 
-  types = ["Admin", "Employees"];
+  types = ["Admin", "Employee"];
 
   deleteDialog = false;
 
@@ -276,11 +285,51 @@ export default class StaffComponent extends Vue {
     //@ts-ignore
     this.$refs.form.reset();
     this.dialog = false;
-    location.reload();
+    if (this.cardTitle === "Add New Staff") {
+      location.reload();
+    }
   }
 
   editStaff(staff: StaffsInterface): void {
-    console.log(staff);
+    this.editedStaff.id = staff.id;
+    this.editedStaff.firstName = staff.firstName;
+    this.editedStaff.lastName = staff.lastName;
+    this.editedStaff.contact = staff.contact;
+    this.editedStaff.email = staff.email;
+    this.editedStaff.type = staff.type;
+
+    this.staff.id = staff.id;
+    this.staff.firstName = staff.firstName;
+    this.staff.lastName = staff.lastName;
+    this.staff.contact = staff.contact;
+    this.staff.email = staff.email;
+    this.staff.type = staff.type;
+    this.cardTitle = "Edit Staff";
+    this.dialog = true;
+  }
+
+  saveEdit(): void {
+    if (this.editedStaff.type === "Admin") {
+      this.$store.dispatch("removeAdmin", this.editedStaff.id);
+    } else if (this.editedStaff.type === "Employee") {
+      this.$store.dispatch("removeEmployee", this.editedStaff.id);
+    }
+
+    if (this.staff.type === "Admin") {
+      this.$store.dispatch("addAdmin", { ...this.staff });
+    } else if (this.staff.type === "Employee") {
+      this.$store.dispatch("addEmployee", { ...this.staff });
+    }
+
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    //@ts-ignore
+    this.$refs.form.reset();
+    this.dialog = false;
+    this.notificationText = "Edit Success";
+    this.snackbarColor = "success";
+    this.snackbarIcon = "mdi-check-all";
+    this.snackbar = true;
+    location.reload();
   }
 
   deleteItem(staff: StaffsInterface): void {
