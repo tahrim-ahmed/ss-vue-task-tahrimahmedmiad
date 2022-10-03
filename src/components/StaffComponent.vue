@@ -239,7 +239,7 @@ export default class StaffComponent extends Vue {
       ? this.$store.getters.getAdmins
       : this.$store.getters.getEmployees;
 
-  save(): void {
+  save(): any {
     if (
       this.staff.id !== "" &&
       this.staff.firstName !== "" &&
@@ -270,7 +270,9 @@ export default class StaffComponent extends Vue {
       this.snackbarColor = "red";
       this.snackbarIcon = "mdi-alert";
       this.snackbar = true;
-      location.reload();
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      //@ts-ignore
+      setTimeout(location.reload(), 2200);
     }
   }
 

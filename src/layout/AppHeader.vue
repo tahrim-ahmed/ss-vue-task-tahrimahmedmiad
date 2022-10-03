@@ -1,5 +1,9 @@
 <template>
-  <v-app-bar app flat style="background: linear-gradient(to right, #fc00ff, #00dbde);">
+  <v-app-bar
+    app
+    flat
+    style="background: linear-gradient(to right, #fc00ff, #00dbde)"
+  >
     <v-container class="py-0 fill-height">
       <v-avatar class="mr-3">
         <img src="./images/Staff-remove.png" alt="Logo" />
